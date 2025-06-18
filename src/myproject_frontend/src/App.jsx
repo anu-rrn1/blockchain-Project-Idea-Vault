@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
+// Re-including this import as per your provided code.
 import { myproject_backend } from "../../declarations/myproject_backend";
+
+// Define a key for localStorage to store our ideas
 const LOCAL_STORAGE_KEY = "ideaVaultIdeas";
 
 // Define guidelines for each domain
@@ -45,6 +48,7 @@ function App() {
   });
   const [viewingDomain, setViewingDomain] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+
   const domains = [
     "Product",
     "Research",
@@ -56,7 +60,6 @@ function App() {
 
   useEffect(() => {
     try {
-
       localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(allIdeas));
       console.log("Ideas saved to localStorage.");
     } catch (error) {
@@ -89,110 +92,126 @@ function App() {
   };
 
   return (
-    <div className="all">
-    <div style={styles.container}>
-      <h1 style={styles.header}>💡 Research/Project Idea Vault</h1>
+    <div className="all"> {/* This outer div can be styled in index.css if needed for full page */}
+      <div style={styles.container}>
+        <h1 style={styles.header}>💡 Research/Project Idea Vault</h1>
 
-      {/* Section for submitting new ideas */}
-      <div style={styles.section}>
-        <h2 style={styles.subHeader}>Submit a New Idea</h2>
-        <div style={styles.inputGroup}>
-          <label htmlFor="domain-select" style={styles.label}>
-            Select Domain:
-          </label>
-          <select
-            id="domain-select"
-            value={selectedDomain}
-            onChange={(e) => setSelectedDomain(e.target.value)}
-            style={styles.select}
-          >
-            <option value="">-- Choose a Domain --</option>
-            {domains.map((domain) => (
-              <option key={domain} value={domain}>
-                {domain}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        {/* Display guidelines when a domain is selected for submission */}
-        {selectedDomain && domainGuidelines[selectedDomain] && (
-          <div style={styles.guidelineBox}>
-            <h3 style={styles.guidelineTitle}>{domainGuidelines[selectedDomain].title} Guidelines:</h3>
-            <p style={styles.guidelineDescription}>{domainGuidelines[selectedDomain].description}</p>
+        {/* Section for submitting new ideas */}
+        <div style={styles.section}>
+          <h2 style={styles.subHeader}>Submit a New Idea</h2>
+          <div style={styles.inputGroup}>
+            <label htmlFor="domain-select" style={styles.label}>
+              Select Domain:
+            </label>
+            <select
+              id="domain-select"
+              value={selectedDomain}
+              onChange={(e) => setSelectedDomain(e.target.value)}
+              style={styles.select}
+            >
+              <option value="">-- Choose a Domain --</option>
+              {domains.map((domain) => (
+                <option key={domain} value={domain}>
+                  {domain}
+                </option>
+              ))}
+            </select>
           </div>
-        )}
 
-        <div style={styles.inputGroup}>
-          <label htmlFor="idea-input" style={styles.label}>
-            Your Idea:
-          </label>
-          <input
-            id="idea-input"
-            value={idea}
-            onChange={(e) => setIdea(e.target.value)}
-            placeholder="Enter your idea here"
-            style={styles.input}
-          />
-        </div>
-        {errorMessage && <p style={styles.errorMessage}>{errorMessage}</p>}
-        <button onClick={submitIdea} style={styles.button}>
-          Submit Idea
-        </button>
-      </div>
+          {/* Display guidelines when a domain is selected for submission */}
+          {selectedDomain && domainGuidelines[selectedDomain] && (
+            <div style={styles.guidelineBox}>
+              <h3 style={styles.guidelineTitle}>{domainGuidelines[selectedDomain].title} Guidelines:</h3>
+              <p style={styles.guidelineDescription}>{domainGuidelines[selectedDomain].description}</p>
+            </div>
+          )}
 
-      {/* Section for viewing registered ideas */}
-      <div style={styles.section}>
-        <h2 style={styles.subHeader}>📜 Registered Ideas</h2>
-        <div style={styles.inputGroup}>
-          <label htmlFor="view-domain-select" style={styles.label}>
-            View Ideas by Domain:
-          </label>
-          <select
-            id="view-domain-select"
-            value={viewingDomain}
-            onChange={(e) => setViewingDomain(e.target.value)}
-            style={styles.select}
-          >
-            <option value="">-- Select Domain to View --</option>
-            {domains.map((domain) => (
-              <option key={domain} value={domain}>
-                {domain}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        {/* Display guidelines when a domain is selected for viewing */}
-        {viewingDomain && domainGuidelines[viewingDomain] && (
-          <div style={styles.guidelineBox}>
-            <h3 style={styles.guidelineTitle}>{domainGuidelines[viewingDomain].title} Ideas:</h3>
-            <p style={styles.guidelineDescription}>{domainGuidelines[viewingDomain].description}</p>
+          <div style={styles.inputGroup}>
+            <label htmlFor="idea-input" style={styles.label}>
+              Your Idea:
+            </label>
+            <input
+              id="idea-input"
+              value={idea}
+              onChange={(e) => setIdea(e.target.value)}
+              placeholder="Enter your idea here"
+              style={styles.input}
+            />
           </div>
-        )}
+          {errorMessage && <p style={styles.errorMessage}>{errorMessage}</p>}
+          
+          {/* Red warning note (from previous instruction, kept here) */}
+          <div style={styles.warningNote}>
+            **Note:** Spamming or submitting inappropriate content is strictly prohibited and may result in warnings or removal.
+          </div>
 
-        {viewingDomain && allIdeas[viewingDomain] && (
-          <ul style={styles.ideaList}>
-            {allIdeas[viewingDomain].map((i, idx) => (
-              <li key={idx} style={styles.ideaItem}>
-                {i}</li>
-            ))}
-          </ul>
-        )}
-        {viewingDomain &&
-          (!allIdeas[viewingDomain] ||
-            allIdeas[viewingDomain].length === 0) && (
+          <button onClick={submitIdea} style={styles.button}>
+            Submit Idea
+          </button>
+        </div>
+
+        {/* Section for viewing registered ideas */}
+        <div style={styles.section}>
+          <h2 style={styles.subHeader}>📜 Registered Ideas</h2>
+          <div style={styles.inputGroup}>
+            <label htmlFor="view-domain-select" style={styles.label}>
+              View Ideas by Domain:
+            </label>
+            <select
+              id="view-domain-select"
+              value={viewingDomain}
+              onChange={(e) => setViewingDomain(e.target.value)}
+              style={styles.select}
+            >
+              <option value="">-- Select Domain to View --</option>
+              {domains.map((domain) => (
+                <option key={domain} value={domain}>
+                  {domain}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Display guidelines when a domain is selected for viewing */}
+          {viewingDomain && domainGuidelines[viewingDomain] && (
+            <div style={styles.guidelineBox}>
+              <h3 style={styles.guidelineTitle}>{domainGuidelines[viewingDomain].title} Ideas:</h3>
+              <p style={styles.guidelineDescription}>{domainGuidelines[viewingDomain].description}</p>
+            </div>
+          )}
+
+          {viewingDomain && allIdeas[viewingDomain] && (
+            <ul style={styles.ideaList}>
+              {allIdeas[viewingDomain].map((i, idx) => (
+                <li key={idx} style={styles.ideaItem}>
+                  {i}</li>
+              ))}
+            </ul>
+          )}
+          {viewingDomain &&
+            (!allIdeas[viewingDomain] ||
+              allIdeas[viewingDomain].length === 0) && (
             <p style={styles.noIdeasMessage}>
               No ideas registered for the "{viewingDomain}" domain yet.
             </p>
           )}
-        {!viewingDomain && (
-          <p style={styles.noIdeasMessage}>
-            Please select a domain to view registered ideas.
-          </p>
-        )}
+          {!viewingDomain && (
+            <p style={styles.noIdeasMessage}>
+              Please select a domain to view registered ideas.
+            </p>
+          )}
+        </div>
       </div>
-    </div>
+
+      {/* Footer - Moved outside .container to align independently */}
+      <footer style={styles.footer}>
+        <p style={styles.footerText}>&copy; {new Date().getFullYear()} IdeaVault. All rights reserved.</p>
+        <p style={styles.footerText}>
+          Contact Us: <a href="mailto:support@ideavault.com" style={styles.footerLink}>support@ideavault.com</a>
+        </p>
+      </footer>
+      {/* Note: The custom confirmation modal and its logic are not included in this version,
+           as this code reverts to the state before those features were added. */}
     </div>
   );
 }
@@ -201,9 +220,9 @@ function App() {
 const styles = {
   container: {
     padding: "2rem",
-    fontFamily: "Roboto, sans-serif", 
-    maxWidth: "800px", 
-    margin: "0 auto", 
+    fontFamily: "Roboto, sans-serif",
+    maxWidth: "800px",
+    margin: "0 auto", // This centers the container itself
     backgroundImage: "linear-gradient(to right,rgb(112, 134, 233),rgb(177, 148, 243))", // Your preferred gradient
     borderRadius: "8px",
     boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
@@ -216,11 +235,12 @@ const styles = {
     fontWeight: "bold",
   },
   section: {
-    backgroundColor: "#ffffff",
+    backgroundColor: "#ffffff", // Keeping sections white for readability
     padding: "1.5rem",
     borderRadius: "8px",
     marginBottom: "1.5rem",
     boxShadow: "0 2px 8px rgba(0, 0, 0, 0.05)",
+    // Your preferred gradient on the section background
     backgroundImage: "linear-gradient(to left,rgb(112, 134, 233),rgb(177, 148, 243))",
     border: "1px solid #e0e0e0",
   },
@@ -304,8 +324,8 @@ const styles = {
     marginTop: "1rem",
   },
   guidelineBox: {
-    backgroundColor: "#e8f0f7", 
-    borderLeft: "4px solid #3498db", 
+    backgroundColor: "#e8f0f7",
+    borderLeft: "4px solid #3498db",
     padding: "1rem 1.2rem",
     borderRadius: "6px",
     marginBottom: "1.5rem",
@@ -322,6 +342,43 @@ const styles = {
   guidelineDescription: {
     color: "#555",
     fontSize: "0.95rem",
+  },
+  warningNote: {
+    backgroundColor: "#ffe0e0",
+    border: "1px solid #e74c3c",
+    color: "#c0392b",
+    padding: "0.8rem",
+    borderRadius: "4px",
+    marginBottom: "1rem",
+    fontWeight: "bold",
+    textAlign: "center",
+    fontSize: "0.9em",
+  },
+  // Corrected styles for the footer
+  footer: {
+    marginTop: "2rem",
+    padding: "1rem",
+    textAlign: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.6)", // Example: More opaque background for visibility
+    color: "#FFFFFF", // Explicitly white text for clear visibility
+    fontSize: "0.9rem",
+    // These ensure it aligns with the centered container
+    width: "100%",
+    maxWidth: "800px", // Match the max-width of the container for alignment
+    margin: "0 auto", // Center the footer horizontally
+    borderRadius: "8px",
+    boxShadow: "0 -2px 8px rgba(0,0,0,0.05)",
+  },
+  footerText: {
+    margin: "0.3rem 0",
+    color: "#FFFFFF", // Ensure text color is white here as well
+  },
+  footerLink: {
+    color: "#ADD8E6", // Lighter blue for links in footer
+    textDecoration: "none",
+    "&:hover": {
+      textDecoration: "underline",
+    },
   },
 };
 
