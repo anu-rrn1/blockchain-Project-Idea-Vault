@@ -48,6 +48,9 @@ function App() {
   });
   const [viewingDomain, setViewingDomain] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  // State for controlling the custom confirmation modal
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
 
   const domains = [
     "Product",
@@ -86,6 +89,15 @@ function App() {
       newIdeas[selectedDomain].push(idea.trim());
       return newIdeas;
     });
+
+    // Set the message for the modal and show it with updated wording
+    setModalMessage(
+      "⚠️ Idea submitted! Once submitted, ideas cannot be edited. " +
+      "For **urgent requests**, any **further issues**, or **general inquiries**, " +
+      "please contact us at: support@ideavault.com"
+    );
+    setShowConfirmationModal(true); // Show the custom modal
+
     setIdea("");
     setSelectedDomain("");
     setViewingDomain(selectedDomain);
@@ -140,7 +152,7 @@ function App() {
           </div>
           {errorMessage && <p style={styles.errorMessage}>{errorMessage}</p>}
           
-          {/* Red warning note (from previous instruction, kept here) */}
+          {/* Red warning note */}
           <div style={styles.warningNote}>
             **Note:** Spamming or submitting inappropriate content is strictly prohibited and may result in warnings or removal.
           </div>
@@ -203,15 +215,25 @@ function App() {
         </div>
       </div>
 
-      {/* Footer - Moved outside .container to align independently */}
+      {/* Footer - Positioned for centering with max-width matching container */}
       <footer style={styles.footer}>
         <p style={styles.footerText}>&copy; {new Date().getFullYear()} IdeaVault. All rights reserved.</p>
         <p style={styles.footerText}>
           Contact Us: <a href="mailto:support@ideavault.com" style={styles.footerLink}>support@ideavault.com</a>
         </p>
       </footer>
-      {/* Note: The custom confirmation modal and its logic are not included in this version,
-           as this code reverts to the state before those features were added. */}
+
+      {/* Custom Confirmation Modal */}
+      {showConfirmationModal && (
+        <div style={styles.modalOverlay}>
+          <div style={styles.modalContent}>
+            <p style={styles.modalMessage}>{modalMessage}</p>
+            <button onClick={() => setShowConfirmationModal(false)} style={styles.modalButton}>
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -354,15 +376,51 @@ const styles = {
     textAlign: "center",
     fontSize: "0.9em",
   },
-  // Corrected styles for the footer
+  // Styles for the custom modal
+  modalOverlay: {
+    position: "fixed",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: "rgba(0, 0, 0, 0.7)", // Dark overlay
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    zIndex: 1000, // Ensure it's on top of everything
+  },
+  modalContent: {
+    backgroundColor: "#fff",
+    padding: "2rem",
+    borderRadius: "8px",
+    boxShadow: "0 4px 20px rgba(0, 0, 0, 0.2)",
+    maxWidth: "400px",
+    textAlign: "center",
+    position: "relative",
+  },
+  modalMessage: {
+    fontSize: "1.1rem",
+    marginBottom: "1.5rem",
+    color: "#333",
+  },
+  modalButton: {
+    backgroundColor: "#3498db",
+    color: "white",
+    padding: "0.6rem 1.2rem",
+    border: "none",
+    borderRadius: "4px",
+    cursor: "pointer",
+    fontSize: "1rem",
+    transition: "background-color 0.3s ease",
+  },
+  // Corrected styles for the footer for centering and visibility
   footer: {
-    marginTop: "2rem",
+    marginTop: "2rem", // Space above the footer
     padding: "1rem",
     textAlign: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.6)", // Example: More opaque background for visibility
+    backgroundColor: "rgba(0, 0, 0, 0.6)", // More opaque background for better visibility
     color: "#FFFFFF", // Explicitly white text for clear visibility
     fontSize: "0.9rem",
-    // These ensure it aligns with the centered container
     width: "100%",
     maxWidth: "800px", // Match the max-width of the container for alignment
     margin: "0 auto", // Center the footer horizontally
@@ -371,7 +429,7 @@ const styles = {
   },
   footerText: {
     margin: "0.3rem 0",
-    color: "#FFFFFF", // Ensure text color is white here as well
+    color: "#FFFFFF", // Ensure text color is white here as well for direct text elements
   },
   footerLink: {
     color: "#ADD8E6", // Lighter blue for links in footer
